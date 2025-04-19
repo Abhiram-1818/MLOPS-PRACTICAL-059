@@ -1,13 +1,15 @@
 import os
 import pandas as pd
+import pickle
 from data_processing import create_data_pipeline, save_pipeline, encode_response_variable, split_data
 from ml_functions import training_pipeline, prediction_pipeline, evaluation_matrices
 from helper_functions import log_info, log_error
 
 # Define paths
-DATA_PATH = "D:/MLOPS-2025-DSC/mlops2025-DSC/Data/raw/loan_risk_data.csv"
-ARTIFACTS_PATH = "D:/MLOPS-2025-DSC/mlops2025-DSC/Artifacts"
+DATA_PATH = "C:/Users/Admin/Desktop/MLOPS  AI22059/theory/mlops-theory/mlops-theory/Unit-1/loan_risk_data.csv"
+ARTIFACTS_PATH = "C:/Users/Admin/Desktop/MLOPS  AI22059/theory/mlops2025-DSC/Artifacts"
 os.makedirs(ARTIFACTS_PATH, exist_ok=True)
+
 PIPELINE_PATH = os.path.join(ARTIFACTS_PATH, "data_processing_pipeline.pkl")
 LABEL_ENCODER_PATH = os.path.join(ARTIFACTS_PATH, "label_encoder.pkl")
 MODEL_PATH = os.path.join(ARTIFACTS_PATH, "best_classifier.pkl")
@@ -24,8 +26,13 @@ def main():
     y = df["RiskCategory"]
 
     # Encode target variable and save encoder
-    y_encoded = encode_response_variable(y)
+    label_encoder, y_encoded = encode_response_variable(y)
     log_info(f"✅ Target variable encoded and saved at {LABEL_ENCODER_PATH}")
+    
+    # Save the label encoder
+    with open(LABEL_ENCODER_PATH, 'wb') as file:
+        pickle.dump(label_encoder, file)
+    log_info(f"✅ Label encoder saved at {LABEL_ENCODER_PATH}")
 
     # Create and fit the data processing pipeline
     pipeline = create_data_pipeline(X)

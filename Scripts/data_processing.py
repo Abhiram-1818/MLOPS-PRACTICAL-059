@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from helper_functions import log_info, log_error
 
 # Define paths
-ARTIFACTS_PATH = "D:/MLOPS-2025-DSC/mlops2025-DSC/Artifacts"
+ARTIFACTS_PATH = "C:/Users/Admin/Desktop/MLOPS  AI22059/theory/mlops2025-DSC/Artifacts"
 os.makedirs(ARTIFACTS_PATH, exist_ok=True)
 PIPELINE_PATH = os.path.join(ARTIFACTS_PATH, "data_processing_pipeline.pkl")
 LABEL_ENCODER_PATH = os.path.join(ARTIFACTS_PATH, "label_encoder.pkl")
@@ -45,14 +45,12 @@ def save_pipeline(pipeline):
 
 def encode_response_variable(y):
     """
-    Encodes target variable and saves the label encoder.
+    Encodes the target variable using LabelEncoder.
+    Returns both the fitted label encoder and the encoded target values.
     """
     label_encoder = LabelEncoder()
     y_encoded = label_encoder.fit_transform(y)
-    with open(LABEL_ENCODER_PATH, 'wb') as f:
-        pickle.dump(label_encoder, f)
-    log_info(f"Label encoder saved at {LABEL_ENCODER_PATH}")
-    return y_encoded
+    return label_encoder, y_encoded
 
 def split_data(X, y, test_size=0.2, random_state=42):
     """
